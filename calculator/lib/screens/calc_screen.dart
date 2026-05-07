@@ -93,12 +93,9 @@ class _CalcscreenState extends State<Calcscreen> {
 
     if (_previousValue == null) {
       _previousValue = currentValue;
-    } else if (_pendingOperation != null) {
-      final result = _calculate(
-        _previousValue!,
-        currentValue,
-        _pendingOperation!,
-      );
+    } else if (_pendingOperation != null && !_shouldResetDisplay) {
+      // Only calculate if the user actually entered a second number
+      final result = _calculate(_previousValue!, currentValue, _pendingOperation!);
       _previousValue = result;
       _display = _formatNumber(result);
     }
@@ -111,19 +108,15 @@ class _CalcscreenState extends State<Calcscreen> {
   void _calculateResult() {
     if (_previousValue == null || _pendingOperation == null) return;
 
+    // If the user pressed '=' without entering a second number, default to 0
     final currentValue = _shouldResetDisplay ? 0.0 : double.tryParse(_display);
     if (currentValue == null) return;
 
-    final result = _calculate(
-      _previousValue!,
-      currentValue,
-      _pendingOperation!,
-    );
-
-    _expression =
-        '${_formatNumber(_previousValue!)} $_pendingOperation ${_formatNumber(currentValue)} =';
+    final result = _calculate(_previousValue!, currentValue, _pendingOperation!);
+    
+    _expression = '${_formatNumber(_previousValue!)} $_pendingOperation ${_formatNumber(currentValue)} =';
     _display = _formatNumber(result);
-
+    
     _previousValue = null;
     _pendingOperation = null;
     _shouldResetDisplay = true;
@@ -173,6 +166,18 @@ class _CalcscreenState extends State<Calcscreen> {
                 ),
               ),
             ),
+            const Padding(
+              padding: EdgeInsets.only(bottom: 8),
+              child: Text(
+                'Pranjal,B.tech(CSE) 12536',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.blueGrey,
+                  letterSpacing: 1.2,
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -183,12 +188,10 @@ class _CalcscreenState extends State<Calcscreen> {
     return Expanded(
       child: Row(
         children: buttons
-            .map(
-              (button) => CalcButton(
-                text: button,
-                onPressed: () => _onButtonPressed(button),
-              ),
-            )
+            .map((button) => CalcButton(
+                  text: button,
+                  onPressed: () => _onButtonPressed(button),
+                ))
             .toList(),
       ),
     );
