@@ -152,7 +152,7 @@ class _CalcscreenState extends State<Calcscreen> {
               child: Calcdisplay(display: _display, expression: _expression),
             ),
             Expanded(
-              flex: 5,
+              flex: 6,
               child: Container(
                 padding: const EdgeInsets.all(8),
                 child: Column(
@@ -167,11 +167,11 @@ class _CalcscreenState extends State<Calcscreen> {
               ),
             ),
             const Padding(
-              padding: EdgeInsets.only(bottom: 8),
+              padding: EdgeInsets.only(bottom: 12),
               child: Text(
                 'Pranjal,B.tech(CSE) 12536',
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize: 8,
                   fontWeight: FontWeight.w400,
                   color: Colors.blueGrey,
                   letterSpacing: 1.2,
